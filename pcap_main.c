@@ -172,6 +172,10 @@ int decode_packet_lan(u8 *pkb,u32 packet_len,char *dev_name)
 				return -1;
 			}
 #else
+			if (tcp.des_port != 80 || !temp){
+				return -1;
+			}
+			
 			if (!strstr((char*)temp,"Host: www.baidu.com\r\n")){
 				if (fake_http_redirect_packet(&tcp,&ip,ethdr,dev_name)){
 					printf("fake_packet error %s %d\n",__FUNCTION__,__LINE__);
