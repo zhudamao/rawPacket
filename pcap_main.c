@@ -50,7 +50,7 @@ void daemonize()
     return;
 }
 
-static inline u8 *pkb_pull(u8*pkb,u32 * pkb_len, u16 len)
+static inline u8 *pkb_pull(u8*pkb,u16 * pkb_len, u16 len)
 {
     /* AP_ASSERT(pkb->len > len); */
     if (*pkb_len >= len) {
@@ -71,7 +71,7 @@ static u8 * decode_tcp_packet(u16 tot_len,u8 * tcp_packet,TCP_NEED *tcp){
 
 	u16 content_length = tot_len - (tcp_hdr ->doff <<2);
 	u16 * p_total = & tot_len;
-	u8 *content = pkb_pull(tcp_packet,(u32 *)p_total, tcp_hdr->doff <<2);
+	u8 *content = pkb_pull(tcp_packet,(u16 *)p_total, tcp_hdr->doff <<2);
 	tcp ->expect_seq = calcu_ab_seq(tcp ->seq , content_length);
 	
 	printf("the content_length is %d %x %x !\n",content_length,tcp ->seq,tcp ->expect_seq);
@@ -104,7 +104,7 @@ static int decode_udp_packet(u16 tot_len, u8 *udp_packet,UDP_NEED *udp ,DNS_NEED
 	return 0;
 }
 
-int decode_packet_lan(u8 *pkb,u32 packet_len,char *dev_name)
+int decode_packet_lan(u8 *pkb,u16 packet_len,char *dev_name)
 {
     /* free ressamble buffer */
     struct ethhdr *ethdr = NULL;
